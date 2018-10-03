@@ -25,35 +25,31 @@ public class TFIDFSearcher extends Searcher
 
         String[] terms = new String[allTerm.size()];
 
-
         Iterator<String> iterator = allTerm.iterator();
-
 
         int a = 0;
         while (iterator.hasNext()){
             terms[a] = iterator.next() + "";
             a++;
         }
+        int frequency = 0;
 
         for(int i = 0; i < terms.length; i++){
 		    for(int j = 0; j < documents.size(); j++){
+		        for(int k = 0; k < documents.get(j).getTokens().size(); k++){
+		            if(terms[i].equals(documents.get(j).getTokens().get(k))){
+		                frequency++;
+                    }
+                }
+
 		        if(documents.get(j).getTokens().contains(terms[i])){
 		            idf[i]++;
                 }
-            }
 
+            }
             idf[i] = Math.log10(1 + ((double)docSize / idf[i]));
             System.out.println(i);
         }
-
-
-
-
-
-
-
-
-
 
 
 		}
