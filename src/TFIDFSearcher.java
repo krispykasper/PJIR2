@@ -28,6 +28,7 @@ public class TFIDFSearcher extends Searcher {
                 List<String> list = documents.get(k).getTokens();
                 if (list.contains(termArray[i])) {
                     count++;
+                    break;
                 }
             }
             idf[i] = Math.log10((1 + ((double) documents.size() / count)));
