@@ -28,43 +28,46 @@ public class TFIDFSearcher extends Searcher {
                 List<String> list = documents.get(k).getTokens();
                 if (list.contains(termArray[i])) {
                     count++;
-                    break;
+
                 }
             }
-            idf[i] = Math.log10((1 + ((double) documents.size() / count)));
-            int freq = 0;
+            idf[i] = Math.log10((1 + ((double) documents.size() / (double)count)));
             double tf;
             for (int j = 0; j < documents.size(); j++) {
                 List<String> list = documents.get(j).getTokens();
-                
+                double freq = 0;
 
-                    //System.out.println("doc " + documents.get(j).getTokens());
-                    for (int l = 0; l < list.size(); l++) {
-                        if (list.get(l).equals(termArray[i])) {
-                            freq++;
-                        }
+
+                //System.out.println("doc " + documents.get(j).getTokens());
+                for (int l = 0; l < list.size(); l++) {
+                    if (list.get(l).equals(termArray[i])) {
+                        freq++;
                     }
-                    tf = 1 + Math.log10(freq);
-                    vsm[i][j] = idf[i] * tf;
-                if(freq = 0){
+                }
+                tf = 1 + Math.log10(freq);
+                if (freq == 0) {
                     tf = 0;
                 }
+                vsm[i][j] = idf[i] * tf;
+//                System.out.print(String.format("%.2f", tf) + "\t");
 
-                
 
             }
-            if(i % 1000 == 0){
-                System.out.println(i);
+//            System.out.println();
+            if (i % 1000 == 0) {
+//                System.out.println(i);
             }
 
 
         }
-        for(int i = 0; i < vsm.length; i++){
-            for(int j = 0; j < vsm[0].length; j++){
-                System.out.print(String.format("%.2f",vsm[i][j]) + "\t");
+//        System.out.println(Arrays.toString(idf));
+        for (int i = 0; i < vsm.length; i++) {
+            for (int j = 0; j < vsm[0].length; j++) {
+//                System.out.print(String.format("%.2f", vsm[i][j]) + "\t");
             }
-            System.out.println();
+//            System.out.println();
         }
+//        System.exit(0);
 
     }
 
@@ -87,7 +90,7 @@ public class TFIDFSearcher extends Searcher {
 //        System.out.println(Arrays.toString(terms.toArray()));
 
         for (int i = 0; i < terms.size(); i++) {
-            int freq = 0;
+            double freq = 0;
 
             for (int j = 0; j < qTokens.size(); j++) {
                 if (qTokens.get(j).equals(termArray[i])) {
@@ -101,8 +104,7 @@ public class TFIDFSearcher extends Searcher {
 //            System.out.println("idf: " + idf[i]);
 
             q[i] = (1 + Math.log10(freq)) * idf[i];
-            if (!qTokens.contains(termArray[i])) {
-//                System.out.println(termArray[i]);
+            if(freq == 0){
                 q[i] = 0;
             }
 
@@ -114,33 +116,33 @@ public class TFIDFSearcher extends Searcher {
         List<SearchResult> resultList = new ArrayList<>();
         for (int j = 0; j < vsm[0].length; j++) {
             double sum = 0, qSum = 0, dSum = 0;
-            System.out.println("Start");
+//            System.out.println("Start");
 
             for (int i = 0; i < vsm.length; i++) {
-                System.out.println("q: " + q[i] + "\t vsm: " + vsm[i][j]);
+//                System.out.println("q: " + q[i] + "\t vsm: " + vsm[i][j]);
                 sum += (q[i] * vsm[i][j]);
-                qSum += Math.pow(q[i],2);
-                dSum += Math.pow(vsm[i][j],2);
+                qSum += Math.pow(q[i], 2);
+                dSum += Math.pow(vsm[i][j], 2);
             }
-            System.out.println("End");
+//            System.out.println("End");
 
-            double cosine = ((sum)/(Math.sqrt(qSum))*Math.sqrt(dSum));
+            double cosine = ((sum) / ((Math.sqrt(qSum)) * Math.sqrt(dSum)));
             resultList.add(new SearchResult(documents.get(j), cosine));
 //            System.out.println(cosine);
         }
 
 
-        for(int i = 0; i < k; i++){
+        for (int i = 0; i < k; i++) {
             int ind = -1;
             SearchResult temp = resultList.get(i);
-            for(int j = i + 1; j < resultList.size(); j++){
-                if(resultList.get(j).getScore() > temp.getScore()){
+            for (int j = i + 1; j < resultList.size(); j++) {
+                if (resultList.get(j).getScore() > temp.getScore()) {
                     temp = resultList.get(j);
                     ind = j;
                 }
             }
 
-            if(temp.getDocument().getId() != resultList.get(i).getDocument().getId()){
+            if (temp.getDocument().getId() != resultList.get(i).getDocument().getId()) {
                 resultList.set(ind, resultList.get(i));
                 resultList.set(i, temp);
             }
