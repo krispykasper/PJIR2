@@ -107,6 +107,26 @@ public class StudentTester {
 	public static void testYourSearcher(String corpus)
 	{
 		//YOUR CODE HERE (BONUS)
+
+		System.out.println("@@@ Comparing two searchers on all the queries in "+corpus);
+		long startTime = System.currentTimeMillis();
+		SearcherEvaluator s = new SearcherEvaluator(corpus);
+		Searcher jSearcher = new JaccardSearcher(testCorpus+"/documents.txt");
+		Searcher tSearcher = new TFIDFSearcher(testCorpus+"/documents.txt");
+
+		System.out.println("No, Jaccard, TFIDF");
+
+		for(int i = 0; i < 50; i++){
+
+			double[] jResults = s.getAveragePRF(jSearcher, i);
+			double[] tResults = s.getAveragePRF(tSearcher, i);
+			System.out.print(i + ",");
+			System.out.print(jResults[0] + "," + jResults[1] + "," + jResults[2] + "," + tResults[0] + "," + tResults[1] + "," + tResults[2] + ",");
+			System.out.println();
+		}
+		long endTime = System.currentTimeMillis();
+		System.out.println("@@@ Total time used: "+(endTime-startTime)+" milliseconds.");
+
 	}
 
 	public static void main(String[] args)
@@ -115,10 +135,10 @@ public class StudentTester {
 //		testJaccardSearcher(testCorpus);
 //		testTFIDFSearcher(testCorpus);
 //		testCompareTwoSearchersOnSomeQueries(testCorpus);
-		testCompareTwoSearchersOnAllQueries(testCorpus);
+//		testCompareTwoSearchersOnAllQueries(testCorpus);
 		
 		//********** BONUS **************//
-		//testYourSearcher(testCorpus);
+		testYourSearcher(testCorpus);
 		//*******************************//
 	}
 

@@ -95,9 +95,18 @@ public class SearcherEvaluator {
 
         f1 = (2 * precision * recall) / (precision + recall);
 
+        if (Double.isNaN(precision)) {
+            precision = 0;
+        }
+
+        if (Double.isNaN(recall)) {
+            recall = 0;
+        }
+
         if (Double.isNaN(f1)) {
             f1 = 0;
         }
+
 
         result[0] = precision;
         result[1] = recall;
