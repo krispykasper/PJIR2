@@ -6,7 +6,7 @@ import java.util.*;
 
 public class TFIDFSearcher extends Searcher {
 
-    private Set<String> terms;
+    private Set<String> terms = new HashSet<>();
     private double[][] vsm;
     private double[] idf;
 
@@ -14,10 +14,10 @@ public class TFIDFSearcher extends Searcher {
         super(docFilename);
         /************* YOUR CODE HERE ******************/
 
-        terms = new HashSet<>();
         for (Document document : documents) {
             terms.addAll(document.getTokens());
         }
+        idf = new double[terms.size()];
         vsm = new double[terms.size()][documents.size()];
         String[] termArray = terms.toArray(new String[0]);
 
@@ -30,7 +30,6 @@ public class TFIDFSearcher extends Searcher {
                     count++;
                 }
             }
-            idf = new double[terms.size()];
             idf[i] = Math.log10((1 + ((double) documents.size() / count)));
             int freq = 0;
             double tf;
@@ -66,30 +65,41 @@ public class TFIDFSearcher extends Searcher {
     @Override
     public List<SearchResult> search(String queryString, int k) {
         /************* YOUR CODE HERE ******************/
+//        System.out.println(queryString);
         List<String> qTokens = tokenize(queryString);
+//        System.out.println(Arrays.toString(qTokens.toArray()));
+        List<SearchResult> choosedResultList = new ArrayList<>();
+
+
         double[] q = new double[terms.size()];
-        int freq = 0;
         String[] termArray = terms.toArray(new String[0]);
 
+//        System.out.println(Arrays.toString(terms.toArray()));
+
         for (int i = 0; i < terms.size(); i++) {
-            if (!qTokens.contains(termArray[i])) {
+            int freq = 0;
 
-                q[i] = 0;
-
-                continue;
-            }
             for (int j = 0; j < qTokens.size(); j++) {
                 if (qTokens.get(j).equals(termArray[i])) {
 
                     freq++;
                 }
             }
+//            System.out.println(termArray[i]);
+//            System.out.println("freq: " + freq);
+//
+//            System.out.println("idf: " + idf[i]);
+
             q[i] = (1 + Math.log10(freq)) * idf[i];
+            if (!qTokens.contains(termArray[i])) {
+//                System.out.println(termArray[i]);
+                q[i] = 0;
+            }
 
         }
+//        System.out.println(Arrays.toString(q));
+//        System.exit(0);
 
-        System.out.println(Arrays.toString(q));
-        System.exit(0);
 
         List<SearchResult> resultList = new ArrayList<>();
         double sum = 0, qSum = 0, dSum = 0;
@@ -101,14 +111,31 @@ public class TFIDFSearcher extends Searcher {
             }
 
             double cosine = ((sum)/(Math.sqrt(qSum))*Math.sqrt(dSum));
-            if(!Double.isNaN(cosine)){
-                resultList.add(new SearchResult(documents.get(j), cosine));
-
-            }
+            resultList.add(new SearchResult(documents.get(j), cosine));
+//            System.out.println(cosine);
         }
 
 
-        return resultList;
+        for(int i = 0; i < k; i++){
+            int ind = -1;
+            SearchResult temp = resultList.get(i);
+            for(int j = i + 1; j < resultList.size(); j++){
+                if(resultList.get(j).getScore() > temp.getScore()){
+                    temp = resultList.get(j);
+                    ind = j;
+                }
+            }
+
+            if(temp.getDocument().getId() != resultList.get(i).getDocument().getId()){
+                resultList.set(ind, resultList.get(i));
+                resultList.set(i, temp);
+            }
+
+            choosedResultList.add(resultList.get(i));
+        }
+
+
+        return choosedResultList;
         /***********************************************/
     }
 }
