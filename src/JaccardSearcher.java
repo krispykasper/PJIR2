@@ -12,6 +12,7 @@ public class JaccardSearcher extends Searcher{
 		super(docFilename);
 		/************* YOUR CODE HERE ******************/
 
+		//put document's tokens to subD set and put subD set to d Map
 		for (Document document: documents){
 			Set<String> subD = new HashSet<>();
 			subD.addAll(document.getTokens());
@@ -31,9 +32,11 @@ public class JaccardSearcher extends Searcher{
 		List<SearchResult> choosedResultList = new ArrayList<>();
 		List<String> qTokens = tokenize(queryString);
 
+		//add all qTokens that are tokenized from queryString to Set q
 		q.addAll(qTokens);
 		SearchResult searchResult;
 
+		//find intersect between q and d and find union between q and d then find score
 		for (int docId: d.keySet()){
 			Set<String> intersect = new HashSet<>();
 			Set<String> union = new HashSet<>();
@@ -48,7 +51,7 @@ public class JaccardSearcher extends Searcher{
 
 		}
 
-
+		//find the top k values and set to choosedResultList
 		for(int i = 0; i < k; i++){
 			int ind = -1;
 			SearchResult temp = resultList.get(i);

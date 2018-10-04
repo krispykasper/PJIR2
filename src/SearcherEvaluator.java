@@ -72,16 +72,22 @@ public class SearcherEvaluator {
 
         Set<Integer> r = new HashSet<>(), g = new HashSet<>();
 
+        //get search result from searchers and then store it in set "r"
         List<SearchResult> searchResults = searcher.search(query.getRawText(), k);
         for (SearchResult searchResult : searchResults) {
             r.add(searchResult.getDocument().getId());
         }
 
+        //add ground truth relevant document to set "g"
         g.addAll(answers.get(query.getId()));
 
+
+//        find intersection of "g" and "r"
         Set<Integer> intersect = new HashSet<>();
         intersect.addAll(r);
         intersect.retainAll(g);
+
+//        find precision, recall, and f1
 
         precision = (double) intersect.size() / (double) r.size();
 
@@ -112,12 +118,27 @@ public class SearcherEvaluator {
     public double[] getAveragePRF(Searcher searcher, int k) {
         /*********************** YOUR CODE HERE *************************/
 
+//        get "getQueryPRF" of all queries and find avg of precision, recall, and f1
 
+        double[][] result = new double[queries.size()][3];
+        for(int i=0;i<queries.size();i++){
+            result[i] = getQueryPRF(queries.get(i),searcher,k);
+        }
+        double sumPrecision=0, sumRecall = 0, sumF1 = 0;
+        for(int i=0;i<queries.size();i++){
+            sumPrecision += result[i][0];
+            sumRecall += result[i][1];
+            sumF1 += result[i][2];
+        }
+        double[] avg = new double[3];
+        double qSize = queries.size();
+        avg[0] = sumPrecision / qSize;
+        avg[1] = sumRecall / qSize;
+        avg[2] = sumF1 / qSize;
 
+        return avg;
 
-        return null;
         /****************************************************************/
 
     }
-
 }

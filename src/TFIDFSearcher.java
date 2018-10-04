@@ -14,6 +14,7 @@ public class TFIDFSearcher extends Searcher {
         super(docFilename);
         /************* YOUR CODE HERE ******************/
         terms = new HashSet<>();
+
         for (Document document : documents) {
             terms.addAll(document.getTokens());
         }
@@ -23,6 +24,7 @@ public class TFIDFSearcher extends Searcher {
 
         String[] termArray = terms.toArray(new String[0]);
 
+        //find number of documents D that contain terms[i]
         for (int i = 0; i < terms.size(); i++) {
             int count = 0;
             for (int j = 0; j < documents.size(); j++) {
@@ -35,7 +37,10 @@ public class TFIDFSearcher extends Searcher {
                     }
                 }
             }
+            //find idf
             idf[i] = Math.log10(1 + ((double) documents.size() / (double)count));
+
+            //find term frequency
             double tf;
             for (int j = 0; j < documents.size(); j++) {
                 String[] list = documents.get(j).getTokens().toArray(new String[0]);
@@ -51,14 +56,12 @@ public class TFIDFSearcher extends Searcher {
                 if (freq == 0) {
                     tf = 0;
                 }
+
+              //set vector space model equals inverted document frequency multiply term frequency
                 vsm[i][j] = idf[i] * tf;
 
 
             }
-            if (i % 1000 == 0) {
-                System.out.println(i);
-            }
-
 
         }
 
@@ -79,7 +82,7 @@ public class TFIDFSearcher extends Searcher {
         double[] q = new double[terms.size()];
         String[] termArray = terms.toArray(new String[0]);
 
-
+        //find frequency
         for (int i = 0; i < terms.size(); i++) {
             double freq = 0;
 
@@ -97,7 +100,7 @@ public class TFIDFSearcher extends Searcher {
 
         }
 
-
+        //find cosine similarity
         for (int j = 0; j < vsm[0].length; j++) {
             double sum = 0, qSum = 0, dSum = 0;
 
@@ -111,7 +114,7 @@ public class TFIDFSearcher extends Searcher {
             resultList.add(new SearchResult(documents.get(j), cosine));
         }
 
-
+        //sort the top k values into choosedResultList
         for (int i = 0; i < k; i++) {
             int ind = -1;
             SearchResult temp = resultList.get(i);
