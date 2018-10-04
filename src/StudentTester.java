@@ -12,7 +12,8 @@ public class StudentTester {
 	public static final String testCorpus = "./data/lisa";
 	public static final int k = 10;
 	public static final String[] testQueries = new String[] {
-			"Information Retrieval"
+			""
+			,"Information Retrieval"
 			,"Machine Learning"
 			,"Deep Learning"
 			,"I AM INTERESTED IN INFORMATION ON THE PROVISION OF CURRENT AWARENESS BULLETINS, ESPECIALLY SDI SERVICES IN ANY INSTITUTION, E.G. ACADEMIC LIBRARIES, INDUSTRY, AND IN ANY SUBJECT FIELD. SDI, SELECTIVE DISSEMINATION OF INFORMATION, CURRENT AWARENESS BULLETINS, INFORMATION BULLETINS."
@@ -43,8 +44,7 @@ public class StudentTester {
 	public static void testTFIDFSearcher(String corpus)
 	{
 		System.out.println("@@@ Testing TFIDF-based documents searcher on "+corpus);
-//		String documentFilename = corpus+"/documents.txt";
-		String documentFilename = corpus+"/DTest.txt";
+		String documentFilename = corpus+"/documents.txt";
 		long startTime = System.currentTimeMillis();
 		//initialize search engine
 		Searcher searcher = new TFIDFSearcher(documentFilename);

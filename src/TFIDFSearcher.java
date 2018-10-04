@@ -55,7 +55,7 @@ public class TFIDFSearcher extends Searcher {
             }
 //            System.out.println();
             if (i % 1000 == 0) {
-//                System.out.println(i);
+                System.out.println(i);
             }
 
 
