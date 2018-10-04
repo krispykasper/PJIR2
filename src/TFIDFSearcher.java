@@ -54,6 +54,14 @@ public class TFIDFSearcher extends Searcher {
             if(i % 1000 == 0){
                 System.out.println(i);
             }
+
+
+        }
+        for(int i = 0; i < vsm.length; i++){
+            for(int j = 0; j < vsm[0].length; j++){
+                System.out.print(String.format("%.2f",vsm[i][j]) + "\t");
+            }
+            System.out.println();
         }
 
     }
@@ -102,13 +110,17 @@ public class TFIDFSearcher extends Searcher {
 
 
         List<SearchResult> resultList = new ArrayList<>();
-        double sum = 0, qSum = 0, dSum = 0;
         for (int j = 0; j < vsm[0].length; j++) {
+            double sum = 0, qSum = 0, dSum = 0;
+            System.out.println("Start");
+
             for (int i = 0; i < vsm.length; i++) {
+                System.out.println("q: " + q[i] + "\t vsm: " + vsm[i][j]);
                 sum += (q[i] * vsm[i][j]);
                 qSum += Math.pow(q[i],2);
                 dSum += Math.pow(vsm[i][j],2);
             }
+            System.out.println("End");
 
             double cosine = ((sum)/(Math.sqrt(qSum))*Math.sqrt(dSum));
             resultList.add(new SearchResult(documents.get(j), cosine));
