@@ -2,10 +2,7 @@
 //Section: 
 //ID: 
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class TFIDFSearcher extends Searcher {
 
@@ -55,7 +52,7 @@ public class TFIDFSearcher extends Searcher {
                 }
 
             }
-            if(i % 100 == 0){
+            if(i % 1000 == 0){
                 System.out.println(i);
             }
         }
@@ -91,6 +88,8 @@ public class TFIDFSearcher extends Searcher {
 
         }
 
+        System.out.println(Arrays.toString(q));
+        System.exit(0);
 
         List<SearchResult> resultList = new ArrayList<>();
         double sum = 0, qSum = 0, dSum = 0;
