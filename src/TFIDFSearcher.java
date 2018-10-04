@@ -36,7 +36,7 @@ public class TFIDFSearcher extends Searcher {
             double tf;
             for (int j = 0; j < documents.size(); j++) {
                 List<String> list = documents.get(j).getTokens();
-                if (list.contains(termArray[i])) {
+                
 
                     //System.out.println("doc " + documents.get(j).getTokens());
                     for (int l = 0; l < list.size(); l++) {
@@ -46,10 +46,11 @@ public class TFIDFSearcher extends Searcher {
                     }
                     tf = 1 + Math.log10(freq);
                     vsm[i][j] = idf[i] * tf;
-
-                } else {
-                    vsm[i][j] = 0;
+                if(freq = 0){
+                    tf = 0;
                 }
+
+                
 
             }
             if(i % 1000 == 0){
