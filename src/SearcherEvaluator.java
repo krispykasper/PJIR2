@@ -113,8 +113,19 @@ public class SearcherEvaluator {
         /*********************** YOUR CODE HERE *************************/
 
         double avgPrecision, avgRecall, avgF1;
+        int[] intersect, r, g;
+        double sumPrecision = 0, sumRecall = 0, sumF1 = 0;
 
-//        avgPrecision =
+        int qSize = this.queries.size();
+        List<SearchResult> searchResults = new ArrayList<>();
+
+        for(Document document: queries){
+            searcher.search(document.getRawText(), k);
+        }
+
+
+
+
         return null;
         /****************************************************************/
 
