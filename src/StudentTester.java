@@ -116,12 +116,12 @@ public class StudentTester {
 
 		System.out.println("No, Jaccard, TFIDF");
 
-		for(int i = 0; i < 50; i++){
+		for(int i = 1; i <= 50; i++){
 
 			double[] jResults = s.getAveragePRF(jSearcher, i);
 			double[] tResults = s.getAveragePRF(tSearcher, i);
 			System.out.print(i + ",");
-			System.out.print(jResults[0] + "," + jResults[1] + "," + jResults[2] + "," + tResults[0] + "," + tResults[1] + "," + tResults[2] + ",");
+			System.out.print(jResults[0] + "," + jResults[1] + "," + jResults[2] + "," + tResults[0] + "," + tResults[1] + "," + tResults[2]);
 			System.out.println();
 		}
 		long endTime = System.currentTimeMillis();
