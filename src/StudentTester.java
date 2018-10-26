@@ -45,6 +45,7 @@ public class StudentTester {
 	{
 		System.out.println("@@@ Testing TFIDF-based documents searcher on "+corpus);
 		String documentFilename = corpus+"/documents.txt";
+//		String documentFilename = corpus+"/DTest.txt";
 		long startTime = System.currentTimeMillis();
 		//initialize search engine
 		Searcher searcher = new TFIDFSearcher(documentFilename);
@@ -133,12 +134,12 @@ public class StudentTester {
 	{	
 		/********************* Uncomment test cases you want to test ***************/
 //		testJaccardSearcher(testCorpus);
-//		testTFIDFSearcher(testCorpus);
+		testTFIDFSearcher(testCorpus);
 //		testCompareTwoSearchersOnSomeQueries(testCorpus);
 //		testCompareTwoSearchersOnAllQueries(testCorpus);
 		
 		//********** BONUS **************//
-		testYourSearcher(testCorpus);
+//		testYourSearcher(testCorpus);
 		//*******************************//
 	}
 
