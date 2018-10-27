@@ -17,8 +17,6 @@ public class JaccardSearcher extends Searcher{
 
 		/************* YOUR CODE HERE ******************/
 
-		//put document's tokens to subD set and put subD set to d Map
-
 
 
 		/***********************************************/
