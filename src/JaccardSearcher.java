@@ -10,18 +10,14 @@ import java.util.*;
 
 public class JaccardSearcher extends Searcher{
 
-	private Map<Integer, Set<String>> d = new TreeMap<>();
-
 	public JaccardSearcher(String docFilename) {
 		super(docFilename);
+
+
+
 		/************* YOUR CODE HERE ******************/
 
 		//put document's tokens to subD set and put subD set to d Map
-		for (Document document: documents){
-			Set<String> subD = new HashSet<>();
-			subD.addAll(document.getTokens());
-			d.put(document.getId(), subD);
-		}
 
 
 
@@ -33,7 +29,6 @@ public class JaccardSearcher extends Searcher{
 		/************* YOUR CODE HERE ******************/
 		Set<String> q = new HashSet<>();
 		List<SearchResult> resultList = new ArrayList<>();
-		List<SearchResult> choosedResultList = new ArrayList<>();
 		List<String> qTokens = tokenize(queryString);
 
 		//add all qTokens that are tokenized from queryString to Set q
@@ -41,40 +36,27 @@ public class JaccardSearcher extends Searcher{
 		SearchResult searchResult;
 
 		//find intersect between q and d and find union between q and d then find score
-		for (int docId: d.keySet()){
+		for (Document document: documents){
 			Set<String> intersect = new HashSet<>();
 			Set<String> union = new HashSet<>();
 			intersect.addAll(q);
-			intersect.retainAll(d.get(docId));
+
+			intersect.retainAll(document.getTokens());
 			union.addAll(q);
-			union.addAll(d.get(docId));
+			union.addAll(document.getTokens());
 			double score = (double) intersect.size() / (double)union.size();
 
-			searchResult = new SearchResult(documents.get(docId - 1), score);
+			searchResult = new SearchResult(document, score);
 			resultList.add(searchResult);
 
 		}
 
 		//find the top k values and set to choosedResultList
-		for(int i = 0; i < k; i++){
-			int ind = -1;
-			SearchResult temp = resultList.get(i);
-			for(int j = i + 1; j < resultList.size(); j++){
-				if(resultList.get(j).getScore() > temp.getScore()){
-					temp = resultList.get(j);
-					ind = j;
-				}
-			}
 
-			if(temp.getDocument().getId() != resultList.get(i).getDocument().getId()){
-				resultList.set(ind, resultList.get(i));
-				resultList.set(i, temp);
-			}
+		Collections.sort(resultList);
+		return resultList.subList(0,k);
 
-			choosedResultList.add(resultList.get(i));
-		}
 
-		return choosedResultList;
 		/***********************************************/
 	}
 
