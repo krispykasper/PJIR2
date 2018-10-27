@@ -6,10 +6,7 @@
 //Name: Manisa Satravisut
 //ID: 5988209
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class TFIDFSearcher extends Searcher
 {
@@ -89,7 +86,6 @@ public class TFIDFSearcher extends Searcher
         for(String term: q){
             if(freq.containsKey(term)){
                 freq.put(term, freq.get(term) + 1);
-                System.out.println(freq.get(term));
             }else {
                 freq.put(term, 1);
             }
@@ -102,10 +98,14 @@ public class TFIDFSearcher extends Searcher
         }
 
         for(Document document: documents){
+
+            TreeSet<String> combine = new TreeSet<>();
+            combine.addAll(document.getTokens());
+            combine.addAll(q);
             double sumAB = 0;
             double sumA = 0;
             double sumB = 0;
-            for(String term: terms){
+            for(String term: combine){
                 double a, b;
                 if(wq.get(term) == null){
                     a = 0;
@@ -126,30 +126,11 @@ public class TFIDFSearcher extends Searcher
         }
         System.out.println("Second Part");
 
-        for (int i = 0; i < k; i++) {
-            int ind = -1;
-            SearchResult temp = resultList.get(i);
-            for (int j = i + 1; j < resultList.size(); j++) {
-                if (resultList.get(j).getScore() > temp.getScore()) {
-                    temp = resultList.get(j);
-                    ind = j;
-                }
-            }
-
-            if (temp.getDocument().getId() != resultList.get(i).getDocument().getId()) {
-                resultList.set(ind, resultList.get(i));
-                resultList.set(i, temp);
-            }
-
-            choosedResultList.add(resultList.get(i));
-        }
-        System.out.println("Third Part");
+        Collections.sort(resultList);
 
 
 
-
-
-        return choosedResultList;
+        return resultList.subList(0,k);
 
 
 
